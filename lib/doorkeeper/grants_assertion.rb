@@ -1,21 +1,33 @@
 require 'doorkeeper/request/assertion'
 
-# Should belong to Helpers::Controller?
-module Doorkeeper
-  class ApplicationController < ActionController::Base
-    def resource_owner_from_assertion
-      instance_eval(&Doorkeeper.configuration.resource_owner_from_assertion)
-    end
+Doorkeeper::ApplicationController.class_eval do
+  def resource_owner_from_assertion
+    instance_eval(&Doorkeeper.configuration.resource_owner_from_assertion)
   end
 end
 
-module Doorkeeper
-  class Server
-    def resource_owner_from_assertion
-      context.send :resource_owner_from_assertion
-    end
+Doorkeeper::Server.class_eval do
+  def resource_owner_from_assertion
+    context.send :resource_owner_from_assertion
   end
 end
+
+# Should belong to Helpers::Controller?
+# module Doorkeeper
+#   class ApplicationController < ActionController::Base
+#     def resource_owner_from_assertion
+#       instance_eval(&Doorkeeper.configuration.resource_owner_from_assertion)
+#     end
+#   end
+# end
+
+# module Doorkeeper
+#   class Server
+#     def resource_owner_from_assertion
+#       context.send :resource_owner_from_assertion
+#     end
+#   end
+# end
 
 module Doorkeeper
   class Config
